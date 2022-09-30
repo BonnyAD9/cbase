@@ -4,8 +4,9 @@
 
 #define AL_START_SIZE 16
 
-void *_alAtP(AList list, size_t index);
+void *_alAt(AList list, size_t index);
 void _alSet(AList list, size_t index, void *in);
+bool _alAdd(AList *list, void *in);
 
 AList alCreateCs(size_t elemSize, size_t size)
 {
@@ -49,7 +50,7 @@ bool alGet(AList list, size_t index, void *out)
     if (index >= list.length || !out)
         return false;
 
-    memcpy(out, _alAtP(list, index), list.elemSize);
+    memcpy(out, _alAt(list, index), list.elemSize);
     return true;
 }
 
@@ -61,7 +62,7 @@ void *alAt(AList list, size_t index)
     return list.data + index * list.elemSize;
 }
 
-void *_alAtP(AList list, size_t index)
+void *_alAt(AList list, size_t index)
 {
     return list.data + index * list.elemSize;
 }
@@ -82,6 +83,14 @@ void _alSet(AList list, size_t index, void *in)
 
 bool alAdd(AList *list, void *in)
 {
+    if (!list || !in)
+        return false;
+
+    return _alAdd(list, in);
+}
+
+bool _alAdd(AList *list, void *in)
+{
     if (list->length >= list->allocated)
     {
         size_t newSize = list->allocated < 2 ? 2 : list->allocated + list->allocated / 2;
@@ -98,15 +107,18 @@ bool alAdd(AList *list, void *in)
 
 bool alInsert(AList *list, size_t index, void *in)
 {
-    if (index == list->length)
-        return alAdd(list, in);
+    if (!list || !in)
+        return false;
 
-    if (!alAdd(list, _alAtP(*list, list->length - 1)))
+    if (index == list->length)
+        return _alAdd(list, in);
+
+    if (!_alAdd(list, _alAt(*list, list->length - 1)))
         return false;
 
     memmove(
-        _alAtP(*list, index + 1),
-        _alAtP(*list, index),
+        _alAt(*list, index + 1),
+        _alAt(*list, index),
         (list->length - 1 - index) * list->elemSize
     );
 
@@ -131,5 +143,14 @@ bool alFree(AList *al)
     free(al->data);
     al->allocated = 0;
     al->data = NULL;
+    return true;
+}
+
+bool alClear(AList *al)
+{
+    if (!al)
+        return false;
+
+    al->length = 0;
     return true;
 }

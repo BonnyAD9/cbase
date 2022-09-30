@@ -46,4 +46,6 @@ bool alPFree(AList **al);
 
 bool alFree(AList *al);
 
+bool alClear(AList *al);
+
 #endif // CB_ALIST_INCLUDED
