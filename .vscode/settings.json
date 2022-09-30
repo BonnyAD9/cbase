@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "*.html": "html",
+        "utility": "c",
+        "xutility": "c",
+        "compare": "c",
+        "functional": "c",
+        "memory": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "xmemory": "c",
+        "xstring": "c",
+        "xtr1common": "c",
+        "list": "c"
+    }
+}
