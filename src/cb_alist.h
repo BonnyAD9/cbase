@@ -8,6 +8,8 @@
 #define al_PCreateCs(type, size) alPCreateCs(sizeof(type), size)
 #define al_Create(type) alCreate(sizeof(type))
 #define al_PCreate(type) alPCreate(sizeof(type))
+#define al_At(type, list, index) (*(type *)alAtP(list, index))
+#define al_AtP(type, list, index) ((type *)alAtP(list, index))
 
 typedef struct AList
 {
@@ -27,7 +29,7 @@ AList *alPCreate(size_t elemSize);
 
 bool alGet(AList list, size_t index, void *out);
 
-void *alGetP(AList list, size_t index);
+void *alAtP(AList list, size_t index);
 
 bool alSet(AList list, size_t index, void *in);
 

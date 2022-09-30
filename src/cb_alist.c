@@ -52,7 +52,7 @@ bool alGet(AList list, size_t index, void *out)
     return true;
 }
 
-void *alGetP(AList list, size_t index)
+void *alAtP(AList list, size_t index)
 {
     if (index >= list.length)
         return NULL;
