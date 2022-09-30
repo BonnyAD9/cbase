@@ -8,8 +8,8 @@
 #define al_PCreateCs(type, size) alPCreateCs(sizeof(type), size)
 #define al_Create(type) alCreate(sizeof(type))
 #define al_PCreate(type) alPCreate(sizeof(type))
-#define al_At(type, list, index) (*(type *)alAt(list, index))
-#define al_AtP(type, list, index) ((type *)alAt(list, index))
+#define al_At(type, list, index) (*((type) *)alAt(list, index))
+#define al_AtP(type, list, index) (((type) *)alAt(list, index))
 
 #define al_Add(type, pList, value) ({\
     type v = (value);\
