@@ -2,7 +2,22 @@
 
 #define AL_START_SIZE 16
 
-AList alCreateCs(size_t elemSize, size_t size);
+AList alCreateCs(size_t elemSize, size_t size)
+{
+    AList al = 
+    {
+        .data = malloc(elemSize * size),
+        .elemSize = elemSize,
+        .allocated = size,
+        .length = 0,
+    };
+
+    if (al.data)
+        return al;
+
+    al.allocated = 0;
+    return al;
+}
 
 AList *alPCreateCs(size_t elemSize, size_t size);
 
