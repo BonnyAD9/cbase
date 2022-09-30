@@ -7,15 +7,13 @@ int main()
     AList *al = al_PCreate(int);
 
     for (int i = 0; i < 10; i++)
-        al_Add(int, al, i);
+        al_Add(int, al, 100 + i);
 
-    for (int i = 0; i < al->length; i++)
-        printf("%d ", al_At(int, *al, i));
+    Enumerator en = alEnumarate(al);
 
-    printf("\n");
+    do printf("%d ", en_Cur(int, en));
+    while (enNext(en));
 
-    al_At(int, *al, 2) = 10;
-    
-    for (int i = 0; i < al->length; i++)
-        printf("%d ", al_At(int, *al, i));
+    enFree(en);
+    alFree(al);
 }

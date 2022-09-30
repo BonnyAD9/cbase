@@ -4,9 +4,25 @@
 
 #define AL_START_SIZE 16
 
+typedef struct ALEnumerator
+{
+    AList *list;
+    size_t pos;
+} ALEnumerator;
+
 void *_alAt(AList list, size_t index);
 void _alSet(AList list, size_t index, void *in);
 bool _alAdd(AList *list, void *in);
+
+ALEnumerator *_createALEnumerator(AList *al, size_t pos);
+bool _aleNext(ALEnumerator *ale);
+bool _alePrev(ALEnumerator *ale);
+void *_aleAt(ALEnumerator *ale, size_t index);
+void *_aleCur(ALEnumerator *ale);
+size_t _aleSize(ALEnumerator *ale);
+size_t _aleLen(ALEnumerator *ale);
+void _aleFree(ALEnumerator *ale);
+bool _aleReset(ALEnumerator *ale);
 
 AList alCreateCs(size_t elemSize, size_t size)
 {
@@ -152,5 +168,89 @@ bool alClear(AList *al)
         return false;
 
     al->length = 0;
+    return true;
+}
+
+Enumerator alEnumarate(AList *al)
+{
+    Enumerator en = { .flags = EN_NONE };
+    if (!al)
+        return en;
+
+    en.data = _createALEnumerator(al, 0);
+    if (!en.data)
+        return en;
+
+    en.flags    = EN_ALL;
+    en.next     = (bool   (*)(void *))_aleNext;
+    en.prev     = (bool   (*)(void *))_alePrev;
+    en.at       = (void  *(*)(void *, size_t))_aleAt;
+    en.cur      = (void  *(*)(void *))_aleCur;
+    en.curSize  = (size_t (*)(void *))_aleSize;
+    en.len      = (size_t (*)(void *))_aleLen;
+    en.freeData = (void   (*)(void *))_aleFree;
+    en.reset    = (bool   (*)(void *))_aleReset;
+
+    return en;
+}
+
+ALEnumerator *_createALEnumerator(AList *al, size_t pos)
+{
+    ALEnumerator *ale = malloc(sizeof(ALEnumerator));
+    if (!ale)
+        return NULL;
+
+    ale->list = al;
+    ale->pos = pos;
+    return ale;
+}
+
+bool _aleNext(ALEnumerator *ale)
+{
+    if (ale->pos + 1 >= ale->list->length)
+        return false;
+
+    ++ale->pos;
+    return true;
+}
+
+bool _alePrev(ALEnumerator *ale)
+{
+    if (ale->pos == 0)
+        return false;
+
+    --ale->pos;
+    return true;
+}
+
+void *_aleAt(ALEnumerator *ale, size_t index)
+{
+    return alAt(*ale->list, index);
+}
+
+void *_aleCur(ALEnumerator *ale)
+{
+    return alAt(*ale->list, ale->pos);
+}
+
+size_t _aleSize(ALEnumerator *ale)
+{
+    return ale->list->elemSize;
+}
+
+size_t _aleLen(ALEnumerator *ale)
+{
+    return ale->list->length;
+}
+
+
+void _aleFree(ALEnumerator *ale)
+{
+    free(ale);
+}
+
+bool _aleReset(ALEnumerator *ale)
+{
+    ale->pos = 0;
     return true;
 }

@@ -4,19 +4,21 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define en_At(type, en, index) (*((type) *)enAt(en, index))
-#define en_AtP(type, en, index) (((type) *)enAt(en, index))
-#define en_Cur(type, en) (*((type) *)enCur(en))
-#define en_CurP(type, en) (((type) *)enCur(en))
+#define en_At(type, en, index) (*(type *)enAt(en, index))
+#define en_AtP(type, en, index) ((type *)enAt(en, index))
+#define en_Cur(type, en) (*(type *)enCur(en))
+#define en_CurP(type, en) ((type *)enCur(en))
 
 typedef enum
 {
+    EN_NONE  = 0x00,
     EN_NEXT  = 0x01,
     EN_PREV  = 0x02,
     EN_AT    = 0x04,
     EN_LEN   = 0x08,
     EN_FREE  = 0x10,
     EN_RESET = 0x20,
+    EN_ALL   = 0x3F,
 } EnFlags;
 
 typedef struct Enumerator

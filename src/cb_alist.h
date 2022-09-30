@@ -4,12 +4,14 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "cb_enumerators.h"
+
 #define al_CreateCs(type, size) alCreateCs(sizeof(type), size)
 #define al_PCreateCs(type, size) alPCreateCs(sizeof(type), size)
 #define al_Create(type) alCreate(sizeof(type))
 #define al_PCreate(type) alPCreate(sizeof(type))
-#define al_At(type, list, index) (*((type) *)alAt(list, index))
-#define al_AtP(type, list, index) (((type) *)alAt(list, index))
+#define al_At(type, list, index) (*(type *)alAt(list, index))
+#define al_AtP(type, list, index) ((type *)alAt(list, index))
 
 #define al_Add(type, pList, value) ({\
     type v = (value);\
@@ -47,5 +49,7 @@ bool alPFree(AList **al);
 bool alFree(AList *al);
 
 bool alClear(AList *al);
+
+Enumerator alEnumarate(AList *al);
 
 #endif // CB_ALIST_INCLUDED
