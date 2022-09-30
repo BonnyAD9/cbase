@@ -9,31 +9,6 @@
 #define al_Create(type) alCreate(sizeof(type))
 #define al_PCreate(type) alPCreate(sizeof(type))
 
-#define al_Get(list, index, out) _Generic((list),\
-    AList: alGet((list), (index), (out)),\
-    AList *: alGet(*(list), (index), (out))\
-)
-
-#define al_Set(list, index, in) _Generic((list),\
-    AList: alSet((list), (index), (out)),\
-    AList *:alSet(*(list), (index), (out))\
-)
-
-#define al_Add(list, in) _Generic((list),\
-    AList: alAdd(&(list), (in))\
-    AList *:alAdd((list), (in))\
-)
-
-#define al_Insert(list, index, in) _Generic((list),\
-    AList: alInsert(&(list), (in))\
-    AList *:alInsert((list), (in))\
-)
-
-#define al_Free(list) _Generic((list),\
-    AList: alInsert(&(list))\
-    AList *:alPInsert(&(list))\
-)
-
 typedef struct AList
 {
     char *data;
@@ -50,13 +25,15 @@ AList alCreate(size_t elemSize);
 
 AList *alPCreate(size_t elemSize);
 
-bool alGet(AList list, size_t index, char *out);
+bool alGet(AList list, size_t index, void *out);
 
-bool alSet(AList list, size_t index, char *in);
+void *alGetP(AList list, size_t index);
 
-bool alAdd(AList *list, char *in);
+bool alSet(AList list, size_t index, void *in);
 
-bool alInsert(AList *list, size_t index, char *in);
+bool alAdd(AList *list, void *in);
+
+bool alInsert(AList *list, size_t index, void *in);
 
 bool alPFree(AList **al);
 
